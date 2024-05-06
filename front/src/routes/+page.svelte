@@ -1,2 +1,17 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+    import SideScrollMenu from '$lib/SideScrollMenu.svelte';
+    import Title from '$lib/Title.svelte';
+    import '../styles/global.css';
+</script>
+
+<Title></Title>
+<div class="left-bar">
+    <SideScrollMenu />
+</div>
+
+<style>
+    .left-bar {
+        height: 100vh;
+        width: 200px;
+    }
+</style>

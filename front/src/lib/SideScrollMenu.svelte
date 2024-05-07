@@ -48,7 +48,6 @@
       position: fixed;
       width: 200px;
       height: 100%;
-      margin: 10px;
       overflow-y: auto;
       border: 1px solid #ccc;
   }

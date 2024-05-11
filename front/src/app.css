@@ -5,3 +5,7 @@
 .custom-appbar {
     @apply bg-surface-400 /* Replace with your preferred color */
 }
+
+.search-icon {
+    @apply w-16 h-16 mx-auto
+}

@@ -1,0 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.custom-appbar {
+    @apply bg-surface-400 /* Replace with your preferred color */
+}

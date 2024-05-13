@@ -9,3 +9,5 @@
 .search-icon {
     @apply w-16 h-16 mx-auto
 }
+
+html, body { @apply h-full overflow-hidden; }

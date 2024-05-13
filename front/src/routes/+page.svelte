@@ -2,6 +2,7 @@
     import "../app.css";
     import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
     import { searchQuery } from './store.js';
+    import SearchResult from '$lib/SearchResult.svelte';
 
     let tabSet = 0;
     let searchValue = '';
@@ -10,7 +11,6 @@
         searchValue = value;
     });
 </script>
-
 
 <TabGroup
     justify="justify-center"
@@ -24,13 +24,13 @@
         <img src="/youtube.svg" alt="YouTube" class="search-icon"/>
     </Tab>
 	<Tab bind:group={tabSet} name="tab2" value={1}>
-        <img src="/spotify.svg" alt="YouTube" class="search-icon"/>
+        <img src="/spotify.svg" alt="Spotify" class="search-icon"/>
     </Tab>
 	<svelte:fragment slot="panel">
 		{#if tabSet === 0}
-			<p>{searchValue}</p>
+			<SearchResult {searchValue}></SearchResult>
 		{:else if tabSet === 1}
-            <p>{searchValue}</p>
+            <SearchResult {searchValue}></SearchResult>
 		{/if}
 	</svelte:fragment>
 </TabGroup>

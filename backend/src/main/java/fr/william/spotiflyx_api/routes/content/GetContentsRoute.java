@@ -22,7 +22,10 @@ public class GetContentsRoute implements SpotiflyxRoute {
 
         List<ContentData> contentData = Main.MARIA_DB_SERVICE.getAllContent();
         List<ContentData> youtubeContentData = contentData.stream().filter(content -> content.getContentType() == ContentType.YOUTUBE).limit(10).collect(Collectors.toList());
+        youtubeContentData.sort((content1, content2) -> content2.getCreatedAt().compareTo(content1.getCreatedAt()));
+
         List<ContentData> spotifyContentData = contentData.stream().filter(content -> content.getContentType() == ContentType.SPOTIFY).limit(10).collect(Collectors.toList());
+        spotifyContentData.sort((content1, content2) -> content2.getCreatedAt().compareTo(content1.getCreatedAt()));
 
         for (ContentData content : youtubeContentData)
             youtubeContent.put(content.toJsonObject());

@@ -1,10 +1,8 @@
 <script type="ts">
     import "../app.css";
     import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
-    import SearchResult from '$lib/Result.svelte';
-
+    import Result from '$lib/Result.svelte';
     let tabSet = 0;
-    let searchValue = '';
 
 </script>
 
@@ -25,9 +23,9 @@
     </Tab>
 	<svelte:fragment slot="panel">
 		{#if tabSet === 0}
-			<SearchResult {searchValue}></SearchResult>
+			<Result {tabSet}></Result>
 		{:else if tabSet === 1}
-            <SearchResult {searchValue}></SearchResult>
+            <Result {tabSet}></Result>
 		{/if}
 	</svelte:fragment>
 </TabGroup>

@@ -1,5 +1,10 @@
 <script>
+    import { goto } from "$app/navigation";
     import "../../app.css";
+
+    function login() {
+        goto("/home");
+    }
 </script>
 
 <main class="flex justify-center items-center h-full">
@@ -10,7 +15,7 @@
             <input class="input mb-4 pl-3" title="Input (password)" type="password" placeholder="password" />
         </div>
         <div class="flex flex-col">
-            <button type="button" class="btn variant-filled m-4">Login</button>
+            <button type="button" on:click={login} class="btn variant-filled m-4">Login</button>
             <p class="mx-auto">Don't have an account ? <a href="/register">Register</a></p>
         </div>
     </div>

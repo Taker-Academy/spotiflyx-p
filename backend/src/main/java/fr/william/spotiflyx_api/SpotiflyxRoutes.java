@@ -14,7 +14,6 @@ public enum SpotiflyxRoutes {
     GET_ACCOUNT(HttpMethod.GET, "/auth/account", new GetAccountRoute()),
     EDIT_USER_PROFILE(HttpMethod.PUT, "/auth/edit-profile", new EditSpotiflyxProfileRoute()),
 
-    GET_FIND_CONTENT(HttpMethod.GET, "/content/find", new FindContentRoute()),
     CREATE_CONTENT(HttpMethod.POST, "/content/create", new CreateContentRoute()),
     GET_CONTENT(HttpMethod.GET, "/content/{id}", new GetContentRoute()),
     GET_CONTENTS(HttpMethod.GET, "/content", new GetContentsRoute()),

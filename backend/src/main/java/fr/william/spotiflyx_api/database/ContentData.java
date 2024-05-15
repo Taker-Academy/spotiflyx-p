@@ -1,6 +1,7 @@
 package fr.william.spotiflyx_api.database;
 
 import org.bson.Document;
+import org.json.JSONArray;
 
 import java.util.Date;
 import java.util.List;
@@ -14,8 +15,9 @@ public class ContentData {
     private String image_url;
     private List<String> likedBy;
     private ContentType contentType;
+    private Date createdAt;
 
-    public ContentData(int id, String api_id, String title, String artist, String image_url, Document likedBy, ContentType contentType) {
+    public ContentData(int id, String api_id, String title, String artist, String image_url, Document likedBy, ContentType contentType, Date createdAt) {
         this.id = id;
         this.api_id = api_id;
         this.title = title;
@@ -23,6 +25,7 @@ public class ContentData {
         this.image_url = image_url;
         this.likedBy = likedBy.getList("likedBy", String.class);
         this.contentType = contentType;
+        this.createdAt = createdAt;
     }
 
     public int getId() {
@@ -79,5 +82,32 @@ public class ContentData {
 
     public void setContentType(ContentType contentType) {
         this.contentType = contentType;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+    public String toJsonObject() {
+        JSONArray likedByArray;
+        if (likedBy == null) {
+            likedByArray = new JSONArray();
+        } else {
+            likedByArray = new JSONArray(likedBy);
+        }
+
+        return new Document()
+                .append("id", id)
+                .append("api_id", api_id)
+                .append("title", title)
+                .append("artist", artist)
+                .append("image_url", image_url)
+                .append("likedBy", likedByArray)
+                .append("contentType", contentType.toString())
+                .append("createdAt", createdAt.getTime())
+                .toJson();
     }
 }

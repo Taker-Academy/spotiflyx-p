@@ -40,23 +40,16 @@ public class UserService {
         return new SuccessResponse(new Document("token", token));
     }
 
-    public Response logout(String token) {
-        if (!AuthService.isAuthorized(token))
-            return new ErrorResponse("Unauthorized", 401);
-        TokenManager.removeToken(token);
-        return new SuccessResponse(new Document("message", "Logged out successfully"));
-    }
-
-    public Response changePassword(String id, String oldPassword, String newPassword) {
-        if (!mariaDBService.idExists(id))
+    public Response changePassword(String email, String oldPassword, String newPassword) {
+        if (!mariaDBService.emailExists(email))
             return new ErrorResponse("Account not found", 404);
 
-        String hashedOldPassword = mariaDBService.getPassword(id);
+        String hashedOldPassword = mariaDBService.getPassword(email);
         if (!BCrypt.checkpw(oldPassword, hashedOldPassword))
             return new ErrorResponse("Invalid old password", 400);
 
         String hashedNewPassword = BCrypt.hashpw(newPassword, System.getenv("SALT_ROUNDS"));
-        mariaDBService.updatePassword(id, hashedNewPassword);
+        mariaDBService.updatePassword(email, hashedNewPassword);
         return new SuccessResponse(new Document("message", "Password changed successfully"));
     }
 
@@ -70,5 +63,18 @@ public class UserService {
 
         mariaDBService.deleteUser(email);
         return new SuccessResponse(new Document("message", "Account deleted successfully"));
+    }
+
+    public Response editAccount(String password, String new_email, String new_password, String new_firstName, String new_lastName) {
+        if (!mariaDBService.emailExists(new_email))
+            return new ErrorResponse("Email already exists", 400);
+
+        String hashedPassword = mariaDBService.getPasswordFromMail(new_email);
+        if (!BCrypt.checkpw(password, hashedPassword))
+            return new ErrorResponse("Invalid password", 400);
+
+        String hashedNewPassword = BCrypt.hashpw(new_password, System.getenv("SALT_ROUNDS"));
+        mariaDBService.updateAccount(new_email, hashedNewPassword, new_firstName, new_lastName);
+        return new SuccessResponse(new Document("message", "Account edited successfully"));
     }
 }

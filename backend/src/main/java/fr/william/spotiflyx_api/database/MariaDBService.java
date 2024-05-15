@@ -1,5 +1,7 @@
 package fr.william.spotiflyx_api.database;
 
+import org.bson.Document;
+
 import java.sql.*;
 
 public class MariaDBService {
@@ -18,7 +20,7 @@ public class MariaDBService {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM information_schema.tables WHERE table_name = 'users'");
             if (!rs.next()) {
-                stmt.executeUpdate("CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL)");
+                stmt.executeUpdate("CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, data JSON)");
                 System.out.println("Table users created successfully.");
             }
 
@@ -85,6 +87,22 @@ public class MariaDBService {
         }
     }
 
+    public String getPasswordFromMail(String mail) {
+        String sql = "SELECT password FROM users WHERE mail = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, mail);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getString("password");
+            } else {
+                throw new RuntimeException("Mail not found");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public void updatePassword(String id, String hashedNewPassword) {
         String sql = "UPDATE users SET password = ? WHERE id = ?";
         try {
@@ -115,6 +133,59 @@ public class MariaDBService {
             stmt.setInt(1, Integer.parseInt(id));
             ResultSet rs = stmt.executeQuery();
             return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public UserData getUserData(String token) {
+        String sql = "SELECT * FROM users WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(token));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new UserData(
+                        rs.getInt("id"),
+                        rs.getString("email"),
+                        rs.getString("password"),
+                        rs.getString("first_name"),
+                        rs.getString("last_name"),
+                        Document.parse(rs.getString("data"))
+                );
+            } else {
+                throw new RuntimeException("Id not found");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateUserData(String token, String email, String firstName, String lastName, Document data) {
+        String sql = "UPDATE users SET email = ?, first_name = ?, last_name = ?, data = ? WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, email);
+            stmt.setString(2, firstName);
+            stmt.setString(3, lastName);
+            stmt.setString(4, data.toJson());
+            stmt.setInt(5, Integer.parseInt(token));
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateAccount(String newEmail, String hashedNewPassword, String newFirstName, String newLastName) {
+        String sql = "UPDATE users SET email = ?, password = ?, first_name = ?, last_name = ? WHERE email = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, newEmail);
+            stmt.setString(2, hashedNewPassword);
+            stmt.setString(3, newFirstName);
+            stmt.setString(4, newLastName);
+            stmt.setString(5, newEmail);
+            stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

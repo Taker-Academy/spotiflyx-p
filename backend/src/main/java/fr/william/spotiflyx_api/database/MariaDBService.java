@@ -25,7 +25,7 @@ public class MariaDBService {
             }
             rs = stmt.executeQuery("SELECT * FROM information_schema.tables WHERE table_name = 'content'");
             if (!rs.next()) {
-                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, image_url VARCHAR(255) NOT NULL, likedBy JSON)");
+                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, image_url VARCHAR(255) NOT NULL, likedBy JSON, contentType VARCHAR(255) NOT NULL)");
                 System.out.println("Table content created successfully.");
             }
 
@@ -197,15 +197,16 @@ public class MariaDBService {
         }
     }
 
-    public void createContent(String api_id, String title, String artist, String image_url) {
-        String sql = "INSERT INTO content (api_id, title, artist, image_url, likedBy) VALUES (?, ?, ?, ?, ?)";
+    public void createContent(String api_id, String title, String artist, String image_url, ContentType contentType) {
+        String sql = "INSERT INTO content (api_id, title, artist, image_url, likedBy, contentType) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, api_id);
             stmt.setString(2, title);
             stmt.setString(3, artist);
             stmt.setString(4, image_url);
-            stmt.setString(5, "[]");
+            stmt.setString(5, "{}");
+            stmt.setString(6, contentType.toString());
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -225,10 +226,10 @@ public class MariaDBService {
     }
 
     public ContentData getContentData(String id) {
-        String sql = "SELECT * FROM content WHERE id = ?";
+        String sql = "SELECT * FROM content WHERE api_id = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(id));
+            stmt.setString(1, id);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new ContentData(
@@ -237,7 +238,8 @@ public class MariaDBService {
                         rs.getString("title"),
                         rs.getString("artist"),
                         rs.getString("image_url"),
-                        Document.parse(rs.getString("likedBy"))
+                        Document.parse(rs.getString("likedBy")),
+                        ContentType.valueOf(rs.getString("contentType"))
                 );
             } else {
                 throw new RuntimeException("Id not found");
@@ -247,8 +249,8 @@ public class MariaDBService {
         }
     }
 
-    public void updateContentData(String id, String api_id, String title, String artist, String image_url, Document likedBy) {
-        String sql = "UPDATE content SET api_id = ?, title = ?, artist = ?, image_url = ?, likedBy = ? WHERE id = ?";
+    public void updateContentData(String id, String api_id, String title, String artist, String image_url, Document likedBy, ContentType contentType) {
+        String sql = "UPDATE content SET api_id = ?, title = ?, artist = ?, image_url = ?, likedBy = ?, contentType = ? WHERE id = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, api_id);
@@ -256,7 +258,8 @@ public class MariaDBService {
             stmt.setString(3, artist);
             stmt.setString(4, image_url);
             stmt.setString(5, likedBy.toJson());
-            stmt.setInt(6, Integer.parseInt(id));
+            stmt.setString(6, contentType.toString());
+            stmt.setInt(7, Integer.parseInt(id));
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -4,7 +4,7 @@
 
 
 ## Introduction 🎤
-
+[README.md](README.md)
 Bon, comment vous dire...
 
 🎉 Félicitations 🎉
@@ -52,6 +52,13 @@ Vous avez rapidement rédigé une liste de users stories pour le projet. Ci-dess
 - En tant qu'utilisateur, je veux voir apparaître les résultats de ma recherche sur la page d'accueil en petite bannière en dessous de la barre de recherche. Cette bannière contiendra le nom de la musique ou de la vidéo, ainsi que son type (musique ou vidéo).
 - En tant qu'utilisateur, je veux pouvoir cliquer sur une bannière de recherche pour accéder à la page de la musique ou de la vidéo.
 
+### Page de création de média
+- En tant qu'utilisateur, je veux pouvoir créer un nouveau contenu de type "musique" ou bien "vidéo" depuis une page prévue à cet effet
+- En tant qu'utilisateur, je veux avoir accès à un formulaire me permettant d'ajouter un contenu avec les inputs suivants:
+  - radiobox: "vidéo" / "musique"
+  - "nom": Nom du média
+  - "lien": Lien permettant de récuperer le contenu depuis l'API corréspondante 
+  
 ### Page de musique ou de vidéo
 - En tant qu'utilisateur, je ne veux pas pouvoir accéder à la page d'une musique ou d'une vidéo si je ne suis pas connecté.
 - En tant qu'utilisateur, je veux pouvoir accéder à la page d'une musique ou d'une vidéo en cliquant sur une bannière de recherche.

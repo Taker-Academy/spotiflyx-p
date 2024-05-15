@@ -23,6 +23,11 @@ public class MariaDBService {
                 stmt.executeUpdate("CREATE TABLE users (id SERIAL PRIMARY KEY, email VARCHAR(255) NOT NULL, password VARCHAR(255) NOT NULL, first_name VARCHAR(255) NOT NULL, last_name VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, data JSON)");
                 System.out.println("Table users created successfully.");
             }
+            rs = stmt.executeQuery("SELECT * FROM information_schema.tables WHERE table_name = 'content'");
+            if (!rs.next()) {
+                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL)");
+                System.out.println("Table content created successfully.");
+            }
 
         } catch (SQLException e) {
             System.out.println("Connection to the MariaDB server failed.");
@@ -71,7 +76,7 @@ public class MariaDBService {
         }
     }
 
-    public String getPassword(String id) {
+    public String getPassword(String id) throws Exception {
         String sql = "SELECT password FROM users WHERE id = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
@@ -88,7 +93,7 @@ public class MariaDBService {
     }
 
     public String getPasswordFromMail(String mail) {
-        String sql = "SELECT password FROM users WHERE mail = ?";
+        String sql = "SELECT password FROM users WHERE email = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, mail);
@@ -96,7 +101,7 @@ public class MariaDBService {
             if (rs.next()) {
                 return rs.getString("password");
             } else {
-                throw new RuntimeException("Mail not found");
+                throw new RuntimeException("Email not found");
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

@@ -3,6 +3,8 @@ package fr.william.spotiflyx_api.database;
 import org.bson.Document;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MariaDBService {
     private static Connection connection;
@@ -25,7 +27,7 @@ public class MariaDBService {
             }
             rs = stmt.executeQuery("SELECT * FROM information_schema.tables WHERE table_name = 'content'");
             if (!rs.next()) {
-                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, image_url VARCHAR(255) NOT NULL, likedBy JSON, contentType VARCHAR(255) NOT NULL)");
+                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, image_url VARCHAR(255) NOT NULL, likedBy JSON, contentType VARCHAR(255) NOT NULL, created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP)");
                 System.out.println("Table content created successfully.");
             }
 
@@ -239,7 +241,8 @@ public class MariaDBService {
                         rs.getString("artist"),
                         rs.getString("image_url"),
                         Document.parse(rs.getString("likedBy")),
-                        ContentType.valueOf(rs.getString("contentType"))
+                        ContentType.valueOf(rs.getString("contentType")),
+                        rs.getTimestamp("created_at")
                 );
             } else {
                 throw new RuntimeException("Id not found");
@@ -275,6 +278,31 @@ public class MariaDBService {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public List<ContentData> getAllContent() {
+        List<ContentData> contentList = new ArrayList<>();
+        String sql = "SELECT * FROM content";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                ContentData contentData = new ContentData(
+                        rs.getInt("id"),
+                        rs.getString("api_id"),
+                        rs.getString("title"),
+                        rs.getString("artist"),
+                        rs.getString("image_url"),
+                        Document.parse(rs.getString("likedBy")),
+                        ContentType.valueOf(rs.getString("contentType")),
+                        rs.getTimestamp("created_at")
+                );
+                contentList.add(contentData);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return contentList;
     }
 
 }

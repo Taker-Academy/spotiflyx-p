@@ -25,7 +25,7 @@ public class MariaDBService {
             }
             rs = stmt.executeQuery("SELECT * FROM information_schema.tables WHERE table_name = 'content'");
             if (!rs.next()) {
-                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL)");
+                stmt.executeUpdate("CREATE TABLE content (id SERIAL PRIMARY KEY, api_id VARCHAR(255) NOT NULL, title VARCHAR(255) NOT NULL, artist VARCHAR(255) NOT NULL, image_url VARCHAR(255) NOT NULL, likedBy JSON)");
                 System.out.println("Table content created successfully.");
             }
 
@@ -63,13 +63,14 @@ public class MariaDBService {
     }
 
     public void createUser(String email, String hashedPassword, String firstName, String lastName) {
-        String sql = "INSERT INTO users (email, password, first_name, last_name) VALUES (?, ?, ?, ?)";
+        String sql = "INSERT INTO users (email, password, first_name, last_name, data) VALUES (?, ?, ?, ?, ?)";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
             stmt.setString(1, email);
             stmt.setString(2, hashedPassword);
             stmt.setString(3, firstName);
             stmt.setString(4, lastName);
+            stmt.setString(5, "{}");
             stmt.executeUpdate();
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -143,11 +144,11 @@ public class MariaDBService {
         }
     }
 
-    public UserData getUserData(String token) {
-        String sql = "SELECT * FROM users WHERE id = ?";
+    public UserData getUserData(String email) {
+        String sql = "SELECT * FROM users WHERE email = ?";
         try {
             PreparedStatement stmt = connection.prepareStatement(sql);
-            stmt.setInt(1, Integer.parseInt(token));
+            stmt.setString(1, email);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return new UserData(
@@ -195,4 +196,82 @@ public class MariaDBService {
             throw new RuntimeException(e);
         }
     }
+
+    public void createContent(String api_id, String title, String artist, String image_url) {
+        String sql = "INSERT INTO content (api_id, title, artist, image_url, likedBy) VALUES (?, ?, ?, ?, ?)";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, api_id);
+            stmt.setString(2, title);
+            stmt.setString(3, artist);
+            stmt.setString(4, image_url);
+            stmt.setString(5, "[]");
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public boolean contentExists(String id) {
+        String sql = "SELECT * FROM content WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, id);
+            ResultSet rs = stmt.executeQuery();
+            return rs.next();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public ContentData getContentData(String id) {
+        String sql = "SELECT * FROM content WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return new ContentData(
+                        rs.getInt("id"),
+                        rs.getString("api_id"),
+                        rs.getString("title"),
+                        rs.getString("artist"),
+                        rs.getString("image_url"),
+                        Document.parse(rs.getString("likedBy"))
+                );
+            } else {
+                throw new RuntimeException("Id not found");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void updateContentData(String id, String api_id, String title, String artist, String image_url, Document likedBy) {
+        String sql = "UPDATE content SET api_id = ?, title = ?, artist = ?, image_url = ?, likedBy = ? WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setString(1, api_id);
+            stmt.setString(2, title);
+            stmt.setString(3, artist);
+            stmt.setString(4, image_url);
+            stmt.setString(5, likedBy.toJson());
+            stmt.setInt(6, Integer.parseInt(id));
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void deleteContent(String id) {
+        String sql = "DELETE FROM content WHERE id = ?";
+        try {
+            PreparedStatement stmt = connection.prepareStatement(sql);
+            stmt.setInt(1, Integer.parseInt(id));
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

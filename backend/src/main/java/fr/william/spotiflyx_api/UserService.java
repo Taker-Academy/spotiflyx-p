@@ -1,6 +1,7 @@
 package fr.william.spotiflyx_api;
 
 import fr.william.spotiflyx_api.database.MariaDBService;
+import fr.william.spotiflyx_api.database.UserData;
 import fr.william.spotiflyx_api.response.ErrorResponse;
 import fr.william.spotiflyx_api.response.Response;
 import fr.william.spotiflyx_api.response.SuccessResponse;
@@ -96,5 +97,19 @@ public class UserService {
         String hashedNewPassword = BCrypt.hashpw(new_password, System.getenv("SALT_ROUNDS"));
         mariaDBService.updateAccount(new_email, hashedNewPassword, new_firstName, new_lastName);
         return new SuccessResponse(new Document("message", "Account edited successfully"));
+    }
+
+    public Response getAccountFromToken(String token) {
+        UserData userData = mariaDBService.getUserData(TokenManager.getUserEmailFromToken(token));
+
+        if (userData == null)
+            return new ErrorResponse("Invalid token", 400);
+
+        Document document = new Document("email", userData.getEmail())
+                .append("firstName", userData.getFirstName())
+                .append("lastName", userData.getLastName())
+                .append("data", userData.getData());
+
+        return new SuccessResponse(document);
     }
 }

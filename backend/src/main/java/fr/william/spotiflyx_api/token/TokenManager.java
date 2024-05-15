@@ -1,10 +1,10 @@
 package fr.william.spotiflyx_api.token;
 
-import io.javalin.http.Context;
 import org.mindrot.jbcrypt.BCrypt;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class TokenManager {
 
@@ -12,7 +12,7 @@ public class TokenManager {
     private static final String SALT_ROUNDS = System.getenv("SALT_ROUNDS");
 
     public static String generateToken(String userId) {
-        String token = BCrypt.hashpw(userId, SALT_ROUNDS);
+        String token = BCrypt.hashpw(userId + System.currentTimeMillis() + UUID.randomUUID(), SALT_ROUNDS);
         tokens.put(token, userId);
         return token;
     }
@@ -21,20 +21,12 @@ public class TokenManager {
         return tokens.containsKey(token);
     }
 
-    public static String getUserIdFromToken(String token) {
+    public static String getUserEmailFromToken(String token) {
         return tokens.get(token);
     }
 
     public static void removeToken(String token) {
         tokens.remove(token);
-    }
-
-    public static String extractTokenFromCtx(Context ctx) {
-        String token = ctx.header("Authorization");
-        if (token == null || !token.startsWith("Bearer ")) {
-            return null;
-        }
-        return token;
     }
 
 }

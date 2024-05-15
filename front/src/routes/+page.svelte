@@ -1,37 +1,17 @@
-<script type="ts">
+<script>
     import "../app.css";
-    import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
-    import { searchQuery } from './store.js';
-    import SearchResult from '$lib/SearchResult.svelte';
-
-    let tabSet = 0;
-    let searchValue = '';
-
-    searchQuery.subscribe(value => {
-        searchValue = value;
-    });
 </script>
 
-<TabGroup
-    justify="justify-center"
-	active="variant-filled-primary"
-	hover="hover:variant-soft-primary"
-	flex="flex-1 lg:flex-none"
-	rounded=""
-	class="bg-surface-100-800-token w-full"
->
-	<Tab bind:group={tabSet} name="tab1" value={0}>
-        <img src="/youtube.svg" alt="YouTube" class="search-icon"/>
-    </Tab>
-	<Tab bind:group={tabSet} name="tab2" value={1}>
-        <img src="/spotify.svg" alt="Spotify" class="search-icon"/>
-    </Tab>
-	<svelte:fragment slot="panel">
-		{#if tabSet === 0}
-			<SearchResult {searchValue}></SearchResult>
-		{:else if tabSet === 1}
-            <SearchResult {searchValue}></SearchResult>
-		{/if}
-	</svelte:fragment>
-</TabGroup>
-			
+<main class="flex justify-center items-center h-full">
+    <div class="glass-form">
+        <div class="flex flex-col items-center">
+            <h1 class="text-7xl">Welcome</h1>
+            <h1 class="text-7xl pb-4">to</h1>
+            <h1 class="text-7xl">Spotiflix</h1>
+        </div>
+        <div class="flex flex-col items-center">
+            <p class="mx-auto"><a href="/login">Login</a> or <a href="/register">Register</a></p>
+            <p>Already login ? <a href="/watch">Let's start</a></p>
+        </div>
+    </div>
+</main>

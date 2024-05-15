@@ -1,6 +1,21 @@
-<script>
+<script lang="ts">
     import { goto } from "$app/navigation";
     import "../../app.css";
+    import { getToastStore } from '@skeletonlabs/skeleton';
+    import type { ToastSettings } from '@skeletonlabs/skeleton';
+
+
+    const toastStore = getToastStore();
+	
+    const welcomeToast: ToastSettings = {
+        message: 'Welcome to the app.',
+        background: 'variant-filled-success',
+    };
+
+    const errorToast: ToastSettings = {
+        message: 'Error when registering user.',
+        background: 'variant-filled-error',
+    };
 
     let user = {
         firstName: "",
@@ -9,10 +24,29 @@
         password: ""
     }
 
-    function register() {
+    async function register() {
         const userData = JSON.stringify(user);
-        console.log(userData);
-        goto("/home");
+        const response = await fetch('http://127.0.0.1:7070/auth/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: userData
+        });
+
+        if (response.ok) {
+            console.log('User registered successfully');
+            toastStore.trigger(welcomeToast);
+            goto("/home");
+        } else {
+            console.error('Registration failed');
+            toastStore.trigger(errorToast);
+        }
+
+        response.json().then(data => {
+            const token = data.data.token;
+            localStorage.setItem('token', token);
+        });
     }
 </script>
 

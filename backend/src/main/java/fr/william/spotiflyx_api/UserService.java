@@ -32,7 +32,12 @@ public class UserService {
         if (!mariaDBService.emailExists(email))
             return new ErrorResponse("Email not found", 404);
 
-        String hashedPassword = mariaDBService.getPassword(email);
+        String hashedPassword;
+        try {
+            hashedPassword = mariaDBService.getPasswordFromMail(email);
+        } catch (Exception e) {
+            return new ErrorResponse("Invalid password", 400);
+        }
         if (!BCrypt.checkpw(password, hashedPassword))
             return new ErrorResponse("Invalid password", 400);
 
@@ -44,7 +49,12 @@ public class UserService {
         if (!mariaDBService.emailExists(email))
             return new ErrorResponse("Account not found", 404);
 
-        String hashedOldPassword = mariaDBService.getPassword(email);
+        String hashedOldPassword;
+        try {
+            hashedOldPassword = mariaDBService.getPasswordFromMail(email);
+        } catch (Exception e) {
+            return new ErrorResponse("Invalid old password", 400);
+        }
         if (!BCrypt.checkpw(oldPassword, hashedOldPassword))
             return new ErrorResponse("Invalid old password", 400);
 
@@ -57,7 +67,12 @@ public class UserService {
         if (!mariaDBService.emailExists(email))
             return new ErrorResponse("Email not found", 404);
 
-        String hashedPassword = mariaDBService.getPassword(email);
+        String hashedPassword;
+        try {
+            hashedPassword = mariaDBService.getPasswordFromMail(email);
+        } catch (Exception e) {
+            return new ErrorResponse("Invalid password", 400);
+        }
         if (!BCrypt.checkpw(password, hashedPassword))
             return new ErrorResponse("Invalid password", 400);
 
@@ -69,7 +84,12 @@ public class UserService {
         if (!mariaDBService.emailExists(new_email))
             return new ErrorResponse("Email already exists", 400);
 
-        String hashedPassword = mariaDBService.getPasswordFromMail(new_email);
+        String hashedPassword;
+        try {
+            hashedPassword = mariaDBService.getPasswordFromMail(new_email);
+        } catch (Exception e) {
+            return new ErrorResponse("Invalid password", 400);
+        }
         if (!BCrypt.checkpw(password, hashedPassword))
             return new ErrorResponse("Invalid password", 400);
 

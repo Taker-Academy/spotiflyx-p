@@ -13,7 +13,8 @@
 	active="variant-filled-primary"
 	hover="hover:variant-soft-primary"
 	flex="flex-1 lg:flex-none"
-	rounded=""
+	rounded="rounded"
+    border=""
 	class="bg-surface-100-800-token w-full"
 >
 	<Tab bind:group={tabSet} name="tab1" value={0}>

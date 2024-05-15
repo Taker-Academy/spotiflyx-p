@@ -1,6 +1,31 @@
 <script>
+    import { goto } from "$app/navigation";
     import "../../app.css";
     import { AppBar } from '@skeletonlabs/skeleton';
+    import { error } from '@sveltejs/kit';
+    import { onMount } from 'svelte';
+
+    let token;
+
+    onMount(async () => {
+        token = localStorage.getItem('token');
+        if (!token) {
+            goto('/');
+            return;
+        }
+        const options = {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        };
+
+        const url = `http://127.0.0.1:7070/auth/account`;
+        const response = await fetch(url, options);
+
+        if (!response.ok) {
+            goto('/');
+        }
+    });
 </script>
 
 <AppBar class="custom-appbar">

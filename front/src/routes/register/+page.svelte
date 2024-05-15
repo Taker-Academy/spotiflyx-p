@@ -4,7 +4,6 @@
     import { getToastStore } from '@skeletonlabs/skeleton';
     import type { ToastSettings } from '@skeletonlabs/skeleton';
 
-
     const toastStore = getToastStore();
 	
     const welcomeToast: ToastSettings = {

@@ -1,15 +1,45 @@
-<script>
+<script lang="ts">
     import "../../../app.css";
+    import { getToastStore } from '@skeletonlabs/skeleton';
+    import type { ToastSettings } from '@skeletonlabs/skeleton';
 
     let content = {
-        type: 1,
-        name: "",
-        link: ""
-    }
+        contentType: "",
+        title: "",
+    };
 
-    function uploadContent() {
-        const contentData = JSON.stringify(content);
-        console.log(contentData);
+    const toastStore = getToastStore();
+	
+    const successToast: ToastSettings = {
+        message: 'Uploaded.',
+        background: 'variant-filled-success',
+    };
+
+    const errorToast: ToastSettings = {
+        message: 'Failed to upload.',
+        background: 'variant-filled-error',
+    };
+
+    async function uploadContent() {
+        const token = localStorage.getItem('token');
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(content)
+        };
+
+        console.log(options.body);
+
+        const url = `http://127.0.0.1:7070/content/create`;
+        const response = await fetch(url, options);
+
+        if (response.ok) {
+            toastStore.trigger(successToast);
+        } else {
+            toastStore.trigger(errorToast);
+        }
     }
 </script>
 
@@ -18,14 +48,12 @@
         <div class="w-full">
             <h2 class="text-7xl mb-12">Add content</h2>
             <p>Type</p>
-            <select bind:value={content.type} class="select mb-4 pl-3">
-                <option value="youtube">Youtube</option>
-                <option value="spotify">Spotify</option>
+            <select bind:value={content.contentType} class="select mb-4 pl-3">
+                <option value="YOUTUBE">Youtube</option>
+                <option value="SPOTIFY">Spotify</option>
             </select>  
             <p>Name</p>   
-            <input class="input mb-4 pl-3" bind:value={content.name} title="Name" type="text" placeholder="Name" />
-            <p>Link</p>
-            <input class="input mb-4 pl-3" bind:value={content.link} title="Link" type="url" placeholder="https://youtu.be/xvFZjo5PgG0?si=39IIZwcvdokOdE3R" />
+            <input class="input mb-4 pl-3" bind:value={content.title} title="Name" type="text" placeholder="Name" />
 
         </div>
         <div class="flex flex-col">

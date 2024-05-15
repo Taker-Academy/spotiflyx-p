@@ -13,14 +13,16 @@ public class ContentData {
     private String artist;
     private String image_url;
     private List<String> likedBy;
+    private ContentType contentType;
 
-    public ContentData(int id, String api_id, String title, String artist, String image_url, Document likedBy) {
+    public ContentData(int id, String api_id, String title, String artist, String image_url, Document likedBy, ContentType contentType) {
         this.id = id;
         this.api_id = api_id;
         this.title = title;
         this.artist = artist;
         this.image_url = image_url;
         this.likedBy = likedBy.getList("likedBy", String.class);
+        this.contentType = contentType;
     }
 
     public int getId() {
@@ -69,5 +71,13 @@ public class ContentData {
 
     public void setLikedBy(List<String> likedBy) {
         this.likedBy = likedBy;
+    }
+
+    public ContentType getContentType() {
+        return contentType;
+    }
+
+    public void setContentType(ContentType contentType) {
+        this.contentType = contentType;
     }
 }

@@ -6,8 +6,8 @@ import io.javalin.plugin.bundled.CorsPluginConfig;
 
 public class Main {
 
-    public final static MariaDBService postgreService = new MariaDBService();
-    public final static UserService userService = new UserService(postgreService);
+    public final static MariaDBService MARIA_DB_SERVICE = new MariaDBService();
+    public final static UserService USER_SERVICE = new UserService(MARIA_DB_SERVICE);
 
     public static void main(String[] args) {
         MariaDBService.connect();
@@ -25,7 +25,7 @@ public class Main {
     }
 
     public static UserService getUserService() {
-        return userService;
+        return USER_SERVICE;
     }
 
 }

@@ -6,6 +6,10 @@
     @apply bg-surface-400 /* Replace with your preferred color */
 }
 
+.glass-form {
+    @apply flex flex-col justify-between items-center card p-16 m-4 h-2/3 w-1/2 variant-glass-primary
+}
+
 .search-icon {
     @apply w-16 h-16 mx-auto
 }

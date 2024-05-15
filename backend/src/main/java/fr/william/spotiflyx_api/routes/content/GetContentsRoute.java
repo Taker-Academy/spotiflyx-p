@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class GetContentsRoute implements SpotiflyxRoute {
     @Override
     public void handle(Context ctx) {
-        Document response = new Document();
+        JSONObject response = new JSONObject();
 
         JSONArray youtubeContent = new JSONArray();
         JSONArray spotifyContent = new JSONArray();
@@ -30,6 +30,6 @@ public class GetContentsRoute implements SpotiflyxRoute {
             spotifyContent.put(content.toJsonObject());
         response.put("youtube", youtubeContent);
         response.put("spotify", spotifyContent);
-        ctx.json(response.toJson());
+        ctx.json(response.toString());
     }
 }

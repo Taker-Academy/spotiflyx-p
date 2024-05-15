@@ -5,7 +5,7 @@
 
 <AppBar class="custom-appbar">
     <svelte:fragment slot="lead">
-        <a href="/">
+        <a href="/home">
             <img src="/logo.png" alt="Spotiflix logo" class="big-icon ml-8"/>
         </a>
     </svelte:fragment>

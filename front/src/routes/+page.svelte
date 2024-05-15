@@ -11,7 +11,7 @@
         </div>
         <div class="flex flex-col items-center">
             <p class="mx-auto"><a href="/login">Login</a> or <a href="/register">Register</a></p>
-            <p>Already login ? <a href="/watch">Let's start</a></p>
+            <p>Already login ? <a href="/home">Let's start</a></p>
         </div>
     </div>
 </main>

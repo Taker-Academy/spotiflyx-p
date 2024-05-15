@@ -25,5 +25,12 @@ services:
     ports:
       - "7070:7070"
 
+  frontend:
+    build: ./front
+    ports:
+      - "3000:3000"
+    depends_on:
+      - java-app
+
 volumes:
   mariadb_data:

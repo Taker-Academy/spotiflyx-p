@@ -4,21 +4,21 @@ import fr.william.spotiflyx_api.routes.*;
 import io.javalin.Javalin;
 import org.eclipse.jetty.http.HttpMethod;
 
-public enum UserRoutes {
+public enum SpotiflyxRoutes {
 
     LOGIN(HttpMethod.POST, "/auth/login", new LoginRoute()),
     REGISTER(HttpMethod.POST, "/auth/register", new RegisterRoute()),
     CHANGE_PASSWORD(HttpMethod.PUT, "/auth/change-password", new ChangePasswordRoute()),
     DELETE_ACCOUNT(HttpMethod.DELETE, "/auth/delete-account", new DeleteAccountRoute()),
     GET_ACCOUNT(HttpMethod.GET, "/auth/account", new GetAccountRoute()),
-    EDIT_USER_PROFILE(HttpMethod.PUT, "/auth/edit-profile", new EditUserProfileRoute()),
+    EDIT_USER_PROFILE(HttpMethod.PUT, "/auth/edit-profile", new EditSpotiflyxProfileRoute()),
     ;
 
     private final HttpMethod method;
     private final String path;
-    private final UserRoute route;
+    private final SpotiflyxRoute route;
 
-    UserRoutes(HttpMethod method, String path, UserRoute route) {
+    SpotiflyxRoutes(HttpMethod method, String path, SpotiflyxRoute route) {
         this.method = method;
         this.path = path;
         this.route = route;
@@ -32,7 +32,7 @@ public enum UserRoutes {
         return path;
     }
 
-    public UserRoute getRoute() {
+    public SpotiflyxRoute getRoute() {
         return route;
     }
 

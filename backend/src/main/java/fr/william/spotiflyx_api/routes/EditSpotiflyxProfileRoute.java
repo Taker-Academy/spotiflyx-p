@@ -1,13 +1,12 @@
 package fr.william.spotiflyx_api.routes;
 
 import fr.william.spotiflyx_api.Main;
-import fr.william.spotiflyx_api.UserRoute;
+import fr.william.spotiflyx_api.SpotiflyxRoute;
 import fr.william.spotiflyx_api.response.Response;
-import fr.william.spotiflyx_api.token.TokenManager;
 import io.javalin.http.Context;
 import org.bson.Document;
 
-public class EditUserProfileRoute implements UserRoute {
+public class EditSpotiflyxProfileRoute implements SpotiflyxRoute {
 
     /*
     request body:

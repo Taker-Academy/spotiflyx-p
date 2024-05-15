@@ -1,12 +1,12 @@
 package fr.william.spotiflyx_api.routes;
 
 import fr.william.spotiflyx_api.Main;
-import fr.william.spotiflyx_api.UserRoute;
+import fr.william.spotiflyx_api.SpotiflyxRoute;
 import fr.william.spotiflyx_api.response.Response;
 import io.javalin.http.Context;
 import org.bson.Document;
 
-public class RegisterRoute implements UserRoute {
+public class RegisterRoute implements SpotiflyxRoute {
     @Override
     public void handle(Context ctx) {
         Document body = ctx.bodyAsClass(Document.class);

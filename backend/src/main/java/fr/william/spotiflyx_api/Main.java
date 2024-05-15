@@ -17,7 +17,7 @@ public class Main {
             });
         });
 
-        for (UserRoutes route : UserRoutes.values())
+        for (SpotiflyxRoutes route : SpotiflyxRoutes.values())
             route.register(app);
 
         app.events(event -> event.serverStopping(MariaDBService::close));

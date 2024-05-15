@@ -1,12 +1,12 @@
 package fr.william.spotiflyx_api.routes;
 
 import fr.william.spotiflyx_api.Main;
-import fr.william.spotiflyx_api.UserRoute;
+import fr.william.spotiflyx_api.SpotiflyxRoute;
 import fr.william.spotiflyx_api.response.Response;
 import io.javalin.http.Context;
 import org.bson.Document;
 
-public class ChangePasswordRoute implements UserRoute {
+public class ChangePasswordRoute implements SpotiflyxRoute {
     @Override
     public void handle(Context ctx) {
         Document document = Document.parse(ctx.body());

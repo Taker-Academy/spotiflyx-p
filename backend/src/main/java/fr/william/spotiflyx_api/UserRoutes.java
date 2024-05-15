@@ -10,7 +10,8 @@ public enum UserRoutes {
     REGISTER(HttpMethod.POST, "/auth/register", new RegisterRoute()),
     CHANGE_PASSWORD(HttpMethod.PUT, "/auth/change-password", new ChangePasswordRoute()),
     DELETE_ACCOUNT(HttpMethod.DELETE, "/auth/delete-account", new DeleteAccountRoute()),
-    GET_ACCOUNT(HttpMethod.GET, "/auth/account", new GetAccountRoute())
+    GET_ACCOUNT(HttpMethod.GET, "/auth/account", new GetAccountRoute()),
+    EDIT_USER_PROFILE(HttpMethod.PUT, "/auth/edit-profile", new EditUserProfileRoute()),
     ;
 
     private final HttpMethod method;

@@ -2,6 +2,7 @@ package fr.william.spotiflyx_api.database;
 
 import org.bson.Document;
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.Date;
 import java.util.List;
@@ -91,7 +92,8 @@ public class ContentData {
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
     }
-    public String toJsonObject() {
+
+    public JSONObject toJsonObject() {
         JSONArray likedByArray;
         if (likedBy == null) {
             likedByArray = new JSONArray();
@@ -99,15 +101,14 @@ public class ContentData {
             likedByArray = new JSONArray(likedBy);
         }
 
-        return new Document()
-                .append("id", id)
-                .append("api_id", api_id)
-                .append("title", title)
-                .append("artist", artist)
-                .append("image_url", image_url)
-                .append("likedBy", likedByArray)
-                .append("contentType", contentType.toString())
-                .append("createdAt", createdAt.getTime())
-                .toJson();
+        return new JSONObject()
+                .put("id", id)
+                .put("api_id", api_id)
+                .put("title", title)
+                .put("artist", artist)
+                .put("image_url", image_url)
+                .put("likedBy", likedByArray)
+                .put("contentType", contentType.toString())
+                .put("createdAt", createdAt.getTime());
     }
 }

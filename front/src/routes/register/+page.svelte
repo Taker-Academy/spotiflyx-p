@@ -1,5 +1,10 @@
 <script>
+    import { goto } from "$app/navigation";
     import "../../app.css";
+
+    function register() {
+        goto("/home");
+    }
 </script>
 
 <main class="flex justify-center items-center h-full">
@@ -12,7 +17,7 @@
             <input class="input mb-4 pl-3" title="Input (password)" type="password" placeholder="password" />
         </div>
         <div class="flex flex-col">
-            <button type="button" class="btn variant-filled m-4">Register</button>
+            <button type="button" on:click={register} class="btn variant-filled m-4">Register</button>
             <p class="mx-auto">Already have an account ? <a href="/login">Login</a></p>
         </div>
     </div>

@@ -1,7 +1,7 @@
 <script lang="ts">
-	import LastUpload from './../../lib/LastUpload.svelte';
+	import LastUpload from '../../lib/LastUpload.svelte';
 	import Search from '../../lib/Search.svelte';
-	import Favorite from './../../lib/Favorite.svelte';
+	import Favorite from '../../lib/Favorite.svelte';
 	import { TabGroup, Tab, TabAnchor } from '@skeletonlabs/skeleton';
 
 	let tabSet: number = 0;

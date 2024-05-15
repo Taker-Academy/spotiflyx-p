@@ -10,10 +10,10 @@
         </a>
     </svelte:fragment>
     <svelte:fragment slot="trail">
-        <a href="/add">
+        <a href="/home/add">
             <img src="/add.svg" alt="add" class="big-icon"/>
         </a>
-        <a href="/user">
+        <a href="/home/user">
             <img src="/user.svg" alt="user" class="big-icon mr-8"/>
         </a>
     </svelte:fragment>
